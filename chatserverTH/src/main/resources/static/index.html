@@ -6,20 +6,28 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Pigeon</title>
+        <title>Pigeon Login</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        Number: <input id="num"><br>
+        Message: <input id="msg">
+        <button onclick="onClick()">Send</button><br>
+       
+         <textarea style="width:800px;height:400px" id="output">
+         </textarea> <br>
+         
+         Username: <input id="user"> <<br>
+         Password: <input id="pass"> <br>
+         <button onclick="login()">Login</button>
+         <button onclick="newUser()">New User</button>
+         
         
-        <button onclick="test2()">Stress test</button>
-        <button onclick="test()">Factorial</button>
-        <button onclick="output.value=''; kill()">Clear</button>
-        <button onclick="test3()">again</button>
-        <div>RESULTS</div>
-        <textarea style="width:800px;height:400px" id="output">
-                  </textarea>
+        
+       
+     
+
+
                   
         
         

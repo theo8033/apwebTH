@@ -8,27 +8,32 @@ package com.mycompany.chatserverth;
 import static spark.Spark.*;
 
 public class Main {
+    
+
     public static void main(String[] args) {
         staticFiles.location("static/");
-        get("/hello", (req, res) -> "Hello World");
-        get("/factorial", (req, res) -> factorial(req));
-       // get("/message", (req, res) -> messager(req));
+        get("/sendXhr", (req, res) -> sendXhr(req));
+        get("/newUser", (req, res) -> newUser(req));
+  
+       // get("/User", (req, res) -> auth(req));
+
         
     }
-    public static String factorial(spark.Request req){
-        int num;
-        try{ 
-            num=Integer.parseInt(req.queryParams("number"));
-        } catch (Exception e) {
-            return "ERROR";
-        }
-        double res = 1;
-        for (int i =1; i <=num; i++){
-            res *=i;
-        }
-        return "" + res;
+    public static String sendXhr(spark.Request req){ //will also have a paramater for username
+        String message;
+      
+        message=req.queryParams("msg");
+   
+        return message; //message will be auth+": " + req.queryParams("msg")
+        
        
     }
+    
+   
+    
+   // public static String newUser(spark.Request req){
+       
+    //[}
     
   
     
