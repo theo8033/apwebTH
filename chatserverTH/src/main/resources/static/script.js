@@ -1,71 +1,93 @@
 var outputarea = document.getElementById("output");
+//handle for output field 
 var inputfield = document.getElementById("msg");
+//handel for msg input field 
 var userField = document.getElementById("user");
-var passField= document.getElementById("pass");
-var board = new Array;
-var count=0;
+///handle for username input field 
 
 
-
-function newUser(){
-    createNewUser(userField.value)
+function send(){
+toUrl(inputfield.value);
 }
+//button onclick function, sends msg value to new function 
 
-function createNewUser(n) {
-    var xhrUser=new XMLHttpRequest();
-    xhrUser.open("get", "http://localhost:4567/newUser?user="+n,true);
-    xhrUser.onload = () => {
-     console.log(xhrUser.Response);
-   
+function login(){
+    toLogin(userField.value);
 }
- xhrUser.send();
+//button onclick function  sends username value to new function 
+function toGetMsgs(){
+    
+        request({url: "getMsg", method: "GET"})
+                .then(data => {
+                    print(data);
+                })
+                .catch(error => {
+                    print("Error: " + error);
+                });
+    
 }
+//sends url and method to request function then prints data (msgs) to website
+function toLogin(n){
+    request({url:"login?user="+n, method:"GET"})
+        .then(data => {
+            print("welcome,"+ data);
+            setInterval(toGetMsgs, 100);
+        })
+        .catch(erroor => {
+            console.log("Error: ");
+        })
+}  
+//sends request to login with the username (n). then prints welcome message and lets the loggged in person see msgs (toGetmsgs)
 
-function onClick(){
-    getMsg(inputfield.value);
-    console.log("onClick end.")
+function toUrl(n){
+    var data= new FormData();
+    data.append('msg', 'n');
+    request({url: "sendMsg", method:"post", body:data})
+    .then(result => {
+        session = result;
+    })
+    .catch(error => {
+        console.log("Error: " + error);
+    });
+
 }
+//gets the msg and puts it into a post method in the request
 
-function getMsg(n){
-    console.log(n + " has reached getMsg function");
-    var xhr= new XMLHttpRequest();
-    xhr.open("get", "http://localhost:4567/sendXhr?msg="+n,true);
-    xhr.onload = () => {
-        console.log(xhr.response + " is xhr response");
-        putInArray(xhr.response);
-       
-    }    
-    xhr.send();
-}
 
-function putInArray(l){
-console.log(l+" msg");
-board[count]=l;
-console.log(board[count]);
-count=count+1;
-gatherMsg(board);
 
-}
+function request(obj) {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open(obj.method || "GET", obj.url);
 
-function gatherMsg(arr){
-    var i;
-    var message= "";
-    var c=107;
-    var l;
-    for (i = 0; i < arr.length; i++) { 
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve(xhr.response);
+            } else {
+                reject(xhr.statusText);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+
+        xhr.send(obj.body);
+    });
+};
+
+//the main request method that all request go thru 
+
+
+
+function print(a){
+
+outputarea.value=a;
+
   
-     l=c-arr[i].length
-     for (x = 0; x < l; x++){
-     arr[i]=arr[i]+" ";
 }
-      message= message + (arr[i]);
-      console.log (arr[i] + " is the " + i +" msg in the array");
-    }
-    print(message);
-}
+//prints to text box in website. 
 
-function print(message){
-    outputarea.value=message;
-    inputfield.value="";
 
-}
+
+
+
+
+console.log("end script.")
