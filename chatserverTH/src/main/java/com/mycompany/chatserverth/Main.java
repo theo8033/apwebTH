@@ -12,11 +12,13 @@ import static spark.Spark.*;
 
 public class Main {
 
-  static ArrayList<String> board;
+  static ArrayList<String> board = new ArrayList<>();
 
 
     public static void main(String[] args) {
         staticFiles.location("static/");
+
+        before("*", (req, res)->{System.out.println("req url: " +req.url());});
         get("/getMsg", (req, res) -> getMsg(req));
         //url request getMsg goes to getMSg function
         get("/login", (req, res) -> login(req));
@@ -48,7 +50,7 @@ public class Main {
     public static String login(spark.Request req){
        Context ctx = getCtx(req);
        ctx.name=req.queryParams("user");
-        return (ctx.name !=null?"ok":"not nice");
+        return (ctx.name !=null?ctx.name:"not nice");
     }
     //puts usernames into ctx class 
 

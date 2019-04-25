@@ -41,7 +41,7 @@ function toLogin(n){
 
 function toUrl(n){
     var data= new FormData();
-    data.append('msg', 'n');
+    data.append('msg', n);
     request({url: "sendMsg", method:"post", body:data})
     .then(result => {
         session = result;
@@ -78,10 +78,10 @@ function request(obj) {
 
 
 function print(a){
+if (a!=="[]"){
+outputarea.value+=a;
 
-outputarea.value=a;
-
-  
+  }
 }
 //prints to text box in website. 
 
