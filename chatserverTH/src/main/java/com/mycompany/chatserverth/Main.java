@@ -12,22 +12,21 @@ import static spark.Spark.*;
 
 public class Main {
 
-  static ArrayList<String> board = new ArrayList<>();
+ final static ArrayList<String> board = new ArrayList<>();
 
 
     public static void main(String[] args) {
         staticFiles.location("static/");
 
-        before("*", (req, res)->{System.out.println("req url: " +req.url());});
+        //before("/sendMsg", (req, res)->{System.out.println("req url: " +req.url());});
         get("/getMsg", (req, res) -> getMsg(req));
         //url request getMsg goes to getMSg function
         get("/login", (req, res) -> login(req));
         //url request login goes to login function 
         post("/sendMsg",(req, res) -> sendMsg(req));
         //url request sendMsg goes to SendMsg function also post method
-
-
-
+        
+    
     }
 
 
@@ -37,10 +36,13 @@ public class Main {
         Context ctx = getCtx(req);
         List<String> userMsg;
         
+       
+            synchronized (board) {
                 userMsg = board.subList(ctx.numRead, board.size());
                 ctx.numRead=board.size();
                 //calculates number of msgs read, keeps track of msgs read. 
-        
+            }
+         System.out.println(userMsg.get(0));
         
         return userMsg;
         //returns the unread msgs. 
@@ -50,6 +52,8 @@ public class Main {
     public static String login(spark.Request req){
        Context ctx = getCtx(req);
        ctx.name=req.queryParams("user");
+       ctx.numRead=0;
+       board.add("First message");
         return (ctx.name !=null?ctx.name:"not nice");
     }
     //puts usernames into ctx class 
@@ -65,11 +69,13 @@ public class Main {
       String user=ctx.name;
       String message;
       message=user + ": "+ req.queryParams("msg");
+     
+      
 //adds username to msg
      board.add(message);
       //adds msg to msg array  
            
-     return message;
+     return req.session().id();
          //message will be auth+": " + req.queryParams("msg")
 
 
@@ -79,6 +85,7 @@ public class Main {
         Context ctx = getCtx(req);
         if (ctx.name==null){
             halt(401,"Login");
+            
         }
     }
     //checks if loged in. 

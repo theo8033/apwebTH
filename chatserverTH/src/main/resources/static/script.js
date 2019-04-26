@@ -22,7 +22,7 @@ function toGetMsgs(){
                     print(data);
                 })
                 .catch(error => {
-                    print("Error: " + error);
+                   console.log ("a pigeon has died on the journey");
                 });
     
 }
@@ -30,7 +30,7 @@ function toGetMsgs(){
 function toLogin(n){
     request({url:"login?user="+n, method:"GET"})
         .then(data => {
-            print("welcome,"+ data);
+            print("welcome, "+ data);
             setInterval(toGetMsgs, 100);
         })
         .catch(erroor => {
