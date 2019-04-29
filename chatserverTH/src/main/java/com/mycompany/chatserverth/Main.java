@@ -35,7 +35,7 @@ public class Main {
         
         Context ctx = getCtx(req);
         List<String> userMsg;
-        String msgs=" ";
+        String msgs="";
        
             
                 userMsg = board.subList(ctx.numRead, board.size());
@@ -56,8 +56,18 @@ public class Main {
     public static String login(spark.Request req){
        Context ctx = getCtx(req);
        ctx.name=req.queryParams("user");
-       ctx.numRead=0;
-        return (ctx.name !=null?ctx.name:"not nice");
+       String welcome="Welcome, "+ctx.name+".";
+       if (ctx.name==null){
+           halt(401, "thats not a name...");
+           return "";
+       }
+       else{
+           int subtract=109-welcome.length();
+           for (int i=0; i<subtract; i++){
+          welcome=welcome+" ";
+          }
+        return (welcome);
+       }
     }
     //puts usernames into ctx class 
 
@@ -72,10 +82,15 @@ public class Main {
       String user=ctx.name;
       String message;
       message=user + ": "+ req.queryParams("msg");
-     
+      int length=109-message.length();
       
-//adds username to msg
+      for (int i=0; i<length; i++){
+          message=message+" ";
+          }
+      
+    
      board.add(message);
+    
       //adds msg to msg array  
            
      return req.session().id();

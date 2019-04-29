@@ -1,4 +1,5 @@
 var outputarea = document.getElementById("output");
+outputarea.value="";
 //handle for output field 
 var inputfield = document.getElementById("msg");
 //handel for msg input field 
@@ -30,7 +31,7 @@ function toGetMsgs(){
 function toLogin(n){
     request({url:"login?user="+n, method:"GET"})
         .then(data => {
-            print("welcome, "+ data);
+            print(data);
             setInterval(toGetMsgs, 100);
         })
         .catch(erroor => {
