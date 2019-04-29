@@ -87,10 +87,10 @@ public class Main {
       for (int i=0; i<length; i++){
           message=message+" ";
           }
-      
+    synchronized(board){  
     
      board.add(message);
-    
+    }
       //adds msg to msg array  
            
      return req.session().id();
