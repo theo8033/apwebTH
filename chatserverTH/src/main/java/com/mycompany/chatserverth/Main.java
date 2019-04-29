@@ -30,21 +30,25 @@ public class Main {
     }
 
 
-    public static Object getMsg(spark.Request req){
+    public static String getMsg(spark.Request req){
         
         
         Context ctx = getCtx(req);
         List<String> userMsg;
-        
+        String msgs=" ";
        
-            synchronized (board) {
+            
                 userMsg = board.subList(ctx.numRead, board.size());
                 ctx.numRead=board.size();
                 //calculates number of msgs read, keeps track of msgs read. 
-            }
-         System.out.println(userMsg.get(0));
-        
-        return userMsg;
+            
+              for (int i=0; i<userMsg.size(); i++){
+                  msgs=msgs+" "+userMsg.get(i);
+                  System.out.println(msgs);
+              }
+    
+                return msgs;
+     
         //returns the unread msgs. 
     
     }
@@ -53,7 +57,6 @@ public class Main {
        Context ctx = getCtx(req);
        ctx.name=req.queryParams("user");
        ctx.numRead=0;
-       board.add("First message");
         return (ctx.name !=null?ctx.name:"not nice");
     }
     //puts usernames into ctx class 
