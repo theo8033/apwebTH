@@ -20,7 +20,7 @@ function toGetMsgs(){
     
         request({url: "getMsg", method: "GET"})
                 .then(data => {
-                    print(data);
+                    print(JSON.parse(data));
                 })
                 .catch(error => {
                    console.log ("a pigeon has died on the journey");

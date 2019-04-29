@@ -19,7 +19,7 @@ public class Main {
         staticFiles.location("static/");
 
         //before("/sendMsg", (req, res)->{System.out.println("req url: " +req.url());});
-        get("/getMsg", (req, res) -> getMsg(req));
+         get("/getMsg", "application/json", (req, res) -> getMsg(req, res), new JSONRT());
         //url request getMsg goes to getMSg function
         get("/login", (req, res) -> login(req));
         //url request login goes to login function 
@@ -30,24 +30,24 @@ public class Main {
     }
 
 
-    public static String getMsg(spark.Request req){
+    public static Object getMsg(spark.Request req, spark.Response res){
         
         
         Context ctx = getCtx(req);
         List<String> userMsg;
-        String msgs="";
-       
             
+        synchronized (ctx) {
+            synchronized (board) {
+
+       
                 userMsg = board.subList(ctx.numRead, board.size());
                 ctx.numRead=board.size();
-                //calculates number of msgs read, keeps track of msgs read. 
+                
             
-              for (int i=0; i<userMsg.size(); i++){
-                  msgs=msgs+" "+userMsg.get(i);
-                  System.out.println(msgs);
-              }
-    
-                return msgs;
+            }
+        }
+        System.out.println("json thingy:" + (new JSONRT()).render(userMsg));
+                return userMsg;
      
         //returns the unread msgs. 
     
